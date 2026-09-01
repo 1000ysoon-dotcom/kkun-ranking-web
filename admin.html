@@ -4,1430 +4,355 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>[ADMIN] 신촌 꾼 낚시카페 랭킹보드</title>
-
-  <!-- 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --bg1: #020617;
-      --bg2: #020920;
-      --card: rgba(15, 23, 42, 0.96);
-      --card-soft: rgba(15, 23, 42, 0.9);
-      --line: rgba(56, 189, 248, 0.55);
-      --muted: #9ca3af;
-      --text: #e5e7eb;
-      --neon: #38bdf8;
-      --radius: 18px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+    :root{
+      --bg1:#020617; --bg2:#020920; --card:rgba(15,23,42,.96); --card2:rgba(15,23,42,.9);
+      --line:rgba(56,189,248,.55); --muted:#94a3b8; --text:#e5e7eb; --neon:#38bdf8;
+      --danger:#fb7185; --radius:18px; --shadow:0 18px 45px rgba(15,23,42,.9);
     }
-
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      color: var(--text);
-      font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont;
-      background:
-        radial-gradient(circle at 0% 0%, #0f172a 0, transparent 55%),
-        radial-gradient(circle at 100% 100%, #020617 0, transparent 55%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
-    }
-
-    .wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .logo {
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #e0f2fe, #0ea5e9 40%, #0369a1 70%, #020617 100%);
-      box-shadow:
-        0 0 18px rgba(56, 189, 248, 0.9),
-        0 0 40px rgba(8, 47, 73, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0f172a;
-      font-family: "Jua";
-      font-size: 22px;
-    }
-
-    .title-main {
-      font-family: "Jua";
-      font-size: 22px;
-      letter-spacing: 0.03em;
-    }
-
-    .title-sub {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .header-right {
-      margin-left: auto;
-      text-align: right;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .header-right strong {
-      color: var(--neon);
-    }
-
-    /* 카드 공통 */
-    .grid {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(12, 1fr);
-    }
-
-    .card {
-      grid-column: span 12;
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-      padding: 14px 16px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-soft {
-      background: var(--card-soft);
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      border: 1px solid transparent;
-      background:
-        linear-gradient(135deg, rgba(56, 189, 248, 0.5), transparent 35%, transparent 65%, rgba(59, 130, 246, 0.4)) border-box;
-      mask:
-        linear-gradient(#000 0 0) padding-box,
-        linear-gradient(#000 0 0);
-      mask-composite: exclude;
-      opacity: 0.55;
-      pointer-events: none;
-    }
-
-    @media (min-width: 880px) {
-      .half { grid-column: span 6; }
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .card-title {
-      font-family: "Jua";
-      font-size: 16px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      color: var(--muted);
-      margin-left: 6px;
-    }
-
-    .tag-primary {
-      border-color: rgba(56, 189, 248, 0.8);
-      color: var(--neon);
-      background: rgba(8, 47, 73, 0.7);
-    }
-
-    .desc {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, #0ea5e9, #2563eb);
-      color: #f9fafb;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .btn:hover {
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--neon);
-      border: 1px solid rgba(56, 189, 248, 0.8);
-      box-shadow: none;
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, #fb7185, #f97316);
-      border-color: transparent;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text);
-      font-size: 12px;
-    }
-
-    textarea {
-      border-radius: 12px;
-    }
-
-    input::placeholder,
-    textarea::placeholder {
-      color: rgba(148, 163, 184, 0.7);
-    }
-
-    .row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .row + .row {
-      margin-top: 6px;
-    }
-
-    .spacer {
-      flex: 1;
-    }
-
-    /* 로그인/설정 게이트 */
-    .gate {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-      padding: 14px 16px 16px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      margin-bottom: 18px;
-    }
-
-    .gate-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .gate-title-text {
-      font-family: "Jua";
-      font-size: 16px;
-    }
-
-    .gate-msg {
-      margin-top: 6px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    /* 테이블(Top 5 입력) */
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 6px;
-      font-size: 12px;
-    }
-
-    thead th {
-      text-align: left;
-      color: var(--muted);
-      padding: 4px 6px;
-      font-size: 11px;
-    }
-
-    tbody tr {
-      background: rgba(15, 23, 42, 0.85);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    tbody td {
-      padding: 6px 6px;
-    }
-
-    tbody td:first-child {
-      width: 30px;
-      text-align: center;
-      color: rgba(148, 163, 184, 0.9);
-    }
-
-    /* 빙고 에디터 */
-    .bingo-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .bingo-cell {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 14px;
-      padding: 8px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .bingo-cell.used {
-      background: radial-gradient(circle at 100% 100%, rgba(148, 163, 184, 0.25), rgba(15, 23, 42, 0.95));
-      border-color: rgba(148, 163, 184, 0.9);
-    }
-
-    .bingo-label-row input {
-      border-radius: 999px;
-    }
-
-    .bingo-btn-row button {
-      width: 100%;
-      justify-content: center;
-      padding: 6px 8px;
-      font-size: 11px;
-    }
-
-    /* 시즌전 전체 랭킹 관리 */
-    .season-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 4px;
-      font-size: 12px;
-    }
-
-    .season-table tbody tr {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 999px;
-    }
-
-    .season-table td {
-      padding: 4px 6px;
-    }
-
-    .season-table td:first-child {
-      width: 32px;
-      text-align: right;
-      color: rgba(148, 163, 184, 0.9);
-      font-variant-numeric: tabular-nums;
-      font-size: 11px;
-    }
-
-    .season-row-actions {
-      width: 40px;
-      text-align: center;
-    }
-
-    .link-danger {
-      color: #fb7185;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .link-danger:hover {
-      text-decoration: underline;
-    }
-
-    .footer {
-      margin-top: 18px;
-      font-size: 11px;
-      text-align: center;
-      color: var(--muted);
-    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:"Noto Sans KR",sans-serif;color:var(--text);background:
+      radial-gradient(circle at 0% 0%,#0f172a 0,transparent 55%),
+      radial-gradient(circle at 100% 100%,#020617 0,transparent 55%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));}
+    body{min-height:100vh}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 44px}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .logo{width:46px;height:46px;border-radius:999px;background:radial-gradient(circle at 30% 20%,#e0f2fe,#0ea5e9 40%,#0369a1 70%,#020617 100%);box-shadow:0 0 18px rgba(56,189,248,.9),0 0 40px rgba(8,47,73,.9);display:flex;align-items:center;justify-content:center;color:#0f172a;font-family:"Jua";font-size:22px}
+    .title-main{font-family:"Jua";font-size:22px;letter-spacing:.03em}
+    .title-sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .header-right{margin-left:auto;text-align:right;font-size:11px;color:var(--muted)}
+    .header-right strong{color:var(--neon)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{grid-column:span 12;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;border:1px solid rgba(148,163,184,.4);position:relative;overflow:hidden}
+    .card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;border:1px solid transparent;background:linear-gradient(135deg,rgba(56,189,248,.5),transparent 35%,transparent 65%,rgba(59,130,246,.4)) border-box;mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:.55;pointer-events:none}
+    @media(min-width:900px){.half{grid-column:span 6}}
+    .card-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .card-title{font-family:"Jua";font-size:18px}
+    .tag{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid rgba(56,189,248,.7);color:var(--neon);background:rgba(8,47,73,.55)}
+    .desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.55}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:12px;min-width:560px}
+    thead th{text-align:left;color:var(--muted);padding:4px 6px;font-size:11px;white-space:nowrap}
+    tbody tr{background:rgba(15,23,42,.84)}
+    tbody td{padding:6px}
+    tbody td:first-child{width:54px;text-align:center;color:#bae6fd;font-weight:700;white-space:nowrap}
+    input[type="text"], input[type="number"]{width:100%;padding:9px 11px;border-radius:999px;border:1px solid rgba(148,163,184,.65);background:rgba(15,23,42,.92);color:var(--text);font-size:12px;outline:none}
+    input:focus{border-color:var(--neon);box-shadow:0 0 0 2px rgba(56,189,248,.12)}
+    input::placeholder{color:rgba(148,163,184,.62)}
+    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .spacer{flex:1}
+    .btn{border:0;border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#f9fafb;box-shadow:0 10px 30px rgba(15,23,42,.9)}
+    .btn:hover{box-shadow:0 0 18px rgba(56,189,248,.6)}
+    .btn-outline{background:transparent;color:var(--neon);border:1px solid rgba(56,189,248,.8);box-shadow:none}
+    .btn-danger{background:linear-gradient(135deg,#fb7185,#f97316)}
+    .small-btn{padding:6px 10px;font-size:11px}
+    .season-actions{width:64px;text-align:center}
+    .del{color:var(--danger);cursor:pointer;font-size:11px;font-weight:700}
+    .del:hover{text-decoration:underline}
+    .bingo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .bingo-cell{position:relative;min-height:132px;border-radius:16px;border:1px solid rgba(148,163,184,.65);background:rgba(15,23,42,.88);padding:10px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+    .bingo-no{font-size:10px;color:var(--muted)}
+    .bingo-cell input{position:relative;z-index:2;border-radius:10px;min-height:42px}
+    .bingo-cell.used{border-color:rgba(251,113,133,.9);background:radial-gradient(circle at 50% 50%,rgba(127,29,29,.18),rgba(15,23,42,.94))}
+    .bingo-x{position:absolute;inset:28px 8px 28px;display:flex;align-items:center;justify-content:center;font-size:86px;font-weight:900;line-height:1;color:rgba(251,113,133,.72);text-shadow:0 0 18px rgba(251,113,133,.4);pointer-events:none;z-index:1;opacity:0;transform:rotate(-6deg)}
+    .bingo-cell.used .bingo-x{opacity:1}
+    .bingo-toggle{position:relative;z-index:2;margin-top:auto;width:100%}
+    .bingo-cell.used .bingo-toggle{color:#fecdd3;border-color:rgba(251,113,133,.9)}
+    .statusbar{margin-top:16px;padding:12px 14px;border-radius:14px;border:1px solid rgba(56,189,248,.25);background:rgba(8,47,73,.22);font-size:11px;color:#bae6fd}
+    .footer{margin-top:18px;text-align:center;color:var(--muted);font-size:11px}
+    @media(max-width:720px){.header-right{display:none}.bingo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.title-main{font-size:20px}}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo" aria-hidden="true">꾼</div>
-      <div>
-        <div class="title-main">[ADMIN] 신촌 꾼 낚시카페 랭킹보드</div>
-        <div class="title-sub">Supabase에 저장되는 공식 랭킹 & 치킨빙고 · 이 화면은 사장님/직원 전용</div>
-      </div>
-      <div class="header-right">
-        <div>마지막 저장: <strong id="lastSaved">-</strong></div>
-        <div style="margin-top:2px;">Alt + A → 비밀번호 창 열기</div>
-      </div>
-    </header>
+<div class="wrap">
+  <header>
+    <div class="logo">꾼</div>
+    <div>
+      <div class="title-main">[ADMIN] 신촌 꾼 낚시카페 랭킹보드</div>
+      <div class="title-sub">대물왕 · 소물왕 · 천하제일 낚시대회 · 시즌전 · 치킨빙고 관리</div>
+    </div>
+    <div class="header-right">
+      <div>마지막 저장: <strong id="lastSaved">-</strong></div>
+      <div style="margin-top:2px;">비밀번호 없이 바로 관리</div>
+    </div>
+  </header>
 
-    <!-- 로그인/설정 게이트 -->
-    <section class="gate" id="gate">
-      <div class="gate-title">
-        <span style="font-size:16px;">⚙️</span>
-        <div class="gate-title-text">관리자 잠금</div>
-      </div>
+  <div class="grid">
+    <section class="card half">
+      <div class="card-header"><div class="card-title">대물왕</div><span class="tag">1~5등</span></div>
+      <div class="desc">각 순위별 이름, 기록, 상품을 한 줄에서 관리합니다.</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>순위</th><th>이름</th><th>기록</th><th>상품설정</th></tr></thead>
+        <tbody id="rank_big_body"></tbody>
+      </table></div>
+    </section>
 
-      <!-- 최초 설정 박스 -->
-      <div id="setupBox" style="display:none;">
-        <div class="row">
-          <input id="newPw" type="password" placeholder="새 비밀번호" autocomplete="new-password" />
-        </div>
-        <div class="row">
-          <input id="newPw2" type="password" placeholder="새 비밀번호 확인" autocomplete="new-password" />
-        </div>
-        <div class="row" style="margin-top:8px;">
-          <button class="btn" id="setPwBtn">비밀번호 설정</button>
-        </div>
-        <div class="gate-msg">최초 1회 비밀번호를 설정하세요. (SHA-256 해시로 이 PC의 localStorage에만 저장됩니다.)</div>
-      </div>
+    <section class="card half">
+      <div class="card-header"><div class="card-title">소물왕</div><span class="tag">1~5등</span></div>
+      <div class="desc">각 순위별 이름, 기록, 상품을 한 줄에서 관리합니다.</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>순위</th><th>이름</th><th>기록</th><th>상품설정</th></tr></thead>
+        <tbody id="rank_small_body"></tbody>
+      </table></div>
+    </section>
 
-      <!-- 로그인 박스 -->
-      <div id="loginBox" style="display:none;">
-        <div class="row">
-          <input id="pw" type="password" placeholder="비밀번호 입력" autocomplete="current-password" />
-          <button class="btn" id="loginBtn">입장</button>
-        </div>
-        <div class="gate-msg" id="gateMsg">Alt + A를 눌러 언제든지 이 창을 열 수 있습니다.</div>
+    <section class="card half">
+      <div class="card-header"><div class="card-title">천하제일 낚시대회</div><span class="tag">1~5등</span></div>
+      <div class="desc">각 순위별 이름, 기록/점수, 상품을 한 줄에서 관리합니다.</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>순위</th><th>이름</th><th>기록/점수</th><th>상품설정</th></tr></thead>
+        <tbody id="rank_tour_body"></tbody>
+      </table></div>
+    </section>
+
+    <section class="card half">
+      <div class="card-header"><div class="card-title">시즌전</div><span class="tag">참가자 계속 추가</span></div>
+      <div class="desc">참가자 이름과 점수를 입력합니다. 점수 입력 후 칸을 벗어나면 높은 점수 순으로 자동 정렬되어 순위가 다시 계산됩니다.</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>순위</th><th>이름</th><th>점수</th><th>상품설정</th><th class="season-actions">삭제</th></tr></thead>
+        <tbody id="season_body"></tbody>
+      </table></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn btn-outline" id="addSeasonBtn">+ 참가자 추가</button>
+        <button class="btn btn-outline" id="sortSeasonBtn">점수순 정렬</button>
+        <div class="spacer"></div>
+        <span class="desc" style="margin:0">현재 참가자 <strong id="seasonCount">0</strong>명</span>
       </div>
     </section>
 
-    <!-- 진짜 패널 -->
-    <div id="panel" style="display:none;">
-      <div class="row" style="margin-bottom:12px; align-items:center;">
-        <span class="desc">보안: 비밀번호 해시 · Alt + A 게이트 · 로그인 시도 제한(5회)</span>
+    <section class="card">
+      <div class="card-header"><div class="card-title">치킨빙고</div><span class="tag">4 × 4 · 총 16칸</span></div>
+      <div class="desc">각 칸에 원하는 미션/내용을 직접 입력하세요. 손님이 달성하면 아래 버튼을 눌러 큰 X를 표시하고, 다시 누르면 해제할 수 있습니다.</div>
+      <div class="bingo-grid" id="bingoGrid"></div>
+      <div class="row" style="margin-top:10px">
+        <span class="desc" style="margin:0">남은 칸: <strong id="bingoRemain">16</strong> / 16</span>
         <div class="spacer"></div>
-        <button class="btn btn-outline" id="changePwToggle">비밀번호 변경</button>
+        <button class="btn btn-outline" id="resetBingoBtn">빙고 X 전체 해제</button>
       </div>
-
-      <section class="card card-soft" id="changePwBox" style="display:none; margin-bottom:16px;">
-        <div class="card-header">
-          <div class="card-title">비밀번호 변경</div>
-        </div>
-        <div class="row">
-          <input id="curPw" type="password" placeholder="현재 비밀번호" />
-        </div>
-        <div class="row">
-          <input id="npw1" type="password" placeholder="새 비밀번호" />
-        </div>
-        <div class="row">
-          <input id="npw2" type="password" placeholder="새 비밀번호 확인" />
-        </div>
-        <div class="row" style="margin-top:8px;">
-          <button class="btn" id="applyPwBtn">변경</button>
-          <div class="spacer"></div>
-          <span class="desc">※ 비밀번호는 이 PC의 localStorage에만 저장됩니다.</span>
-        </div>
-      </section>
-
-      <!-- 게임/빙고 제목 설정 -->
-      <section class="card card-soft" id="titleCard" style="margin-bottom:16px;">
-        <div class="card-header">
-          <div class="card-title">게임 & 빙고 제목 설정</div>
-        </div>
-        <div class="desc">
-          여기서 입력한 제목은 Supabase에 저장되며, 손님용 랭킹보드(index.html / kkun-ranking-v2.html)에 자동으로 반영됩니다.
-        </div>
-        <div class="row">
-          <label style="width:120px;font-size:12px;">대물왕 제목</label>
-          <input type="text" id="title_rank_big" placeholder="예: 대물왕" />
-        </div>
-        <div class="row">
-          <label style="width:120px;font-size:12px;">소물왕 제목</label>
-          <input type="text" id="title_rank_small" placeholder="예: 소물왕" />
-        </div>
-        <div class="row">
-          <label style="width:120px;font-size:12px;">천하제일 대회</label>
-          <input type="text" id="title_rank_tour" placeholder="예: 천하제일 낚시대회" />
-        </div>
-        <div class="row">
-          <label style="width:120px;font-size:12px;">시즌전 제목</label>
-          <input type="text" id="title_rank_season" placeholder="예: 시즌전" />
-        </div>
-        <div class="row">
-          <label style="width:120px;font-size:12px;">치킨빙고 제목</label>
-          <input type="text" id="title_bingo" placeholder="예: 치킨빙고" />
-        </div>
-        <div class="row" style="margin-top:6px;">
-          <span class="desc">※ 제목만 바꿔도 손님 화면에는 바로 새 이름으로 표시됩니다. (랭킹/빙고 데이터는 그대로)</span>
-        </div>
-      </section>
-
-      <!-- 🔹 게임별 상품(등수) 설정 -->
-      <section class="card card-soft" id="prizeCard" style="margin-bottom:16px;">
-        <div class="card-header">
-          <div class="card-title">게임별 상품(등수) 설정</div>
-        </div>
-        <div class="desc">
-          각 게임의 1~5등 상품명을 설정하면 Supabase에 저장되고, 손님용 랭킹보드 화면에 바로 반영됩니다.
-          (빈칸으로 두면 해당 등수 상품은 표시되지 않습니다.)
-        </div>
-
-        <!-- 대물왕 -->
-        <div style="margin-top:4px; font-size:12px; font-weight:600;">대물왕</div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">1등 상품</label>
-          <input type="text" id="prize_rank_big_0" placeholder="예: 50,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">2등 상품</label>
-          <input type="text" id="prize_rank_big_1" placeholder="예: 30,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">3등 상품</label>
-          <input type="text" id="prize_rank_big_2" placeholder="예: 10,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">4등 상품</label>
-          <input type="text" id="prize_rank_big_3" placeholder="예: 5,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">5등 상품</label>
-          <input type="text" id="prize_rank_big_4" placeholder="예: 3,000P" />
-        </div>
-
-        <!-- 소물왕 -->
-        <div style="margin-top:10px; font-size:12px; font-weight:600;">소물왕</div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">1등 상품</label>
-          <input type="text" id="prize_rank_small_0" placeholder="예: 50,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">2등 상품</label>
-          <input type="text" id="prize_rank_small_1" placeholder="예: 30,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">3등 상품</label>
-          <input type="text" id="prize_rank_small_2" placeholder="예: 10,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">4등 상품</label>
-          <input type="text" id="prize_rank_small_3" placeholder="예: 5,000P" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">5등 상품</label>
-          <input type="text" id="prize_rank_small_4" placeholder="예: 3,000P" />
-        </div>
-
-        <!-- 천하제일 낚시대회 -->
-        <div style="margin-top:10px; font-size:12px; font-weight:600;">천하제일 낚시대회</div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">1등 상품</label>
-          <input type="text" id="prize_rank_tour_0" placeholder="예: 1시간 할인권 3장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">2등 상품</label>
-          <input type="text" id="prize_rank_tour_1" placeholder="예: 1시간 할인권 1장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">3등 상품</label>
-          <input type="text" id="prize_rank_tour_2" placeholder="예: 4,000원 할인권 1장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">4등 상품</label>
-          <input type="text" id="prize_rank_tour_3" placeholder="예: 3,000원 할인권 1장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">5등 상품</label>
-          <input type="text" id="prize_rank_tour_4" placeholder="예: 2,000원 할인권 1장" />
-        </div>
-
-        <!-- 시즌전 -->
-        <div style="margin-top:10px; font-size:12px; font-weight:600;">시즌전</div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">1등 상품</label>
-          <input type="text" id="prize_rank_season_0" placeholder="예: 10만P + 1시간 할인권 3장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">2등 상품</label>
-          <input type="text" id="prize_rank_season_1" placeholder="예: 7만P + 1시간 할인권 2장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">3등 상품</label>
-          <input type="text" id="prize_rank_season_2" placeholder="예: 3만P + 1만원 할인권 1장" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">4등 상품</label>
-          <input type="text" id="prize_rank_season_3" placeholder="(필요 없으면 비워두기)" />
-        </div>
-        <div class="row">
-          <label style="width:80px;font-size:12px;">5등 상품</label>
-          <input type="text" id="prize_rank_season_4" placeholder="(필요 없으면 비워두기)" />
-        </div>
-      </section>
-
-      <div class="grid">
-        <!-- 대물/소물/천하제일/시즌 Top5 -->
-        <section class="card half">
-          <div class="card-header">
-            <div class="card-title" data-title-display="rank_big">대물왕</div>
-            <span class="tag tag-primary">Top 5</span>
-          </div>
-          <div class="desc">이름 / 점수 (무게, 포인트 등). 손님 화면에는 점수 기준 자동 정렬로 노출됩니다.</div>
-          <div data-key="rank_big"></div>
-        </section>
-
-        <section class="card half">
-          <div class="card-header">
-            <div class="card-title" data-title-display="rank_small">소물왕</div>
-            <span class="tag tag-primary">Top 5</span>
-          </div>
-          <div class="desc">귀여운 물고기, 이벤트용 기록 등.</div>
-          <div data-key="rank_small"></div>
-        </section>
-
-        <section class="card half">
-          <div class="card-header">
-            <div class="card-title" data-title-display="rank_tour">천하제일 낚시대회</div>
-            <span class="tag tag-primary">Top 5</span>
-          </div>
-          <div class="desc">특별 이벤트/대회 순위 입력.</div>
-          <div data-key="rank_tour"></div>
-        </section>
-
-        <section class="card half">
-          <div class="card-header">
-            <div class="card-title" data-title-display="rank_season">시즌전 Top 5</div>
-            <span class="tag tag-primary">목록에서 자동 산출</span>
-          </div>
-          <div class="desc">
-            아래 “시즌전 전체 랭킹”에 입력된 값 기준으로 손님 화면 Top 5가 자동 계산됩니다.
-          </div>
-          <div style="font-size:11px; color:var(--muted);">※ 별도의 입력 없이 전체 랭킹 테이블 기준으로 계산됩니다.</div>
-        </section>
-
-        <!-- 치킨빙고 -->
-        <section class="card" id="bingoCard">
-          <div class="card-header">
-            <div class="card-title" data-title-display="bingo">치킨빙고 4 × 4</div>
-          </div>
-          <div class="desc">각 칸에 상품명을 적고, “사용됨 표시”를 누르면 손님 화면에서 X 표시 + 남은 칸 수가 줄어듭니다.</div>
-          <div class="bingo-grid" id="bingoGrid"></div>
-          <div class="row" style="margin-top:8px;">
-            <span class="desc">남은 칸: <strong id="bingoRemain">-</strong></span>
-            <div class="spacer"></div>
-            <button class="btn btn-outline" id="resetBingoBtn">빙고 전체 리셋</button>
-          </div>
-        </section>
-
-        <!-- 시즌전 전체 랭킹 + 시즌 뱃지 -->
-        <section class="card" id="seasonCard">
-          <div class="card-header">
-            <div class="card-title">
-              시즌전 전체 랭킹
-              <span class="tag" id="seasonId">-</span>
-            </div>
-          </div>
-          <div class="desc">
-            시즌전은 최대 100명까지 입력 가능하며, 손님 화면의 “전체보기” 팝업에 그대로 노출됩니다.
-            위 Top 5는 이 목록을 점수(숫자) 기준으로 자동 정렬한 상위 5명입니다.
-          </div>
-
-          <table class="season-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>이름</th>
-                <th>점수</th>
-                <th class="season-row-actions">삭제</th>
-              </tr>
-            </thead>
-            <tbody id="seasonTbody"></tbody>
-          </table>
-
-          <div class="row" style="margin-top:8px;">
-            <button class="btn btn-outline" id="addSeasonRowBtn">행 추가</button>
-            <div class="spacer"></div>
-            <button class="btn btn-outline" id="seasonResetBtn">시즌 ID 리셋</button>
-          </div>
-
-          <hr style="border:0;border-top:1px solid rgba(30,64,175,0.7);margin:12px 0;">
-
-          <div class="card-header" style="margin-top:0;">
-            <div class="card-title">
-              시즌 뱃지 관리
-              <span class="tag">모든 인원 누적</span>
-            </div>
-          </div>
-          <div class="desc">
-            “현재 Top 5 → 시즌 뱃지 누적”을 누르면, 대물/소물/천하제일/시즌 Top5 이름이 시즌 뱃지에 자동 추가됩니다.
-            필요하면 이름을 직접 입력해도 됩니다.
-          </div>
-
-          <div class="row" style="margin-top:6px; flex-wrap:wrap;">
-            <select id="badgeCat" style="max-width:140px;">
-              <option value="rank_big">대물왕</option>
-              <option value="rank_small">소물왕</option>
-              <option value="rank_tour">천하제일 대회</option>
-              <option value="rank_season">시즌전</option>
-            </select>
-            <input id="badgeNames" type="text" placeholder="이름을 쉼표로 입력 (예: 홍길동, 이순신, 마스터 킴)" />
-            <button class="btn btn-outline" id="badgeAddBtn">이름 추가</button>
-          </div>
-
-          <div class="row" style="margin-top:6px;">
-            <button class="btn btn-outline" id="badgeFromTopBtn">현재 Top 5 → 시즌 뱃지 누적</button>
-          </div>
-
-          <div class="grid" style="margin-top:10px;">
-            <div class="card card-soft" style="grid-column:span 6;">
-              <div class="card-header" style="margin-bottom:4px;">
-                <div class="card-title" style="font-size:13px;">대물왕 뱃지</div>
-              </div>
-              <div class="desc">이름 옆 X를 눌러 삭제 가능</div>
-              <div id="badgeList_big" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-            </div>
-            <div class="card card-soft" style="grid-column:span 6;">
-              <div class="card-header" style="margin-bottom:4px;">
-                <div class="card-title" style="font-size:13px;">소물왕 뱃지</div>
-              </div>
-              <div class="desc"></div>
-              <div id="badgeList_small" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-            </div>
-            <div class="card card-soft" style="grid-column:span 6;">
-              <div class="card-header" style="margin-bottom:4px;">
-                <div class="card-title" style="font-size:13px;">천하제일 대회 뱃지</div>
-              </div>
-              <div class="desc"></div>
-              <div id="badgeList_tour" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-            </div>
-            <div class="card card-soft" style="grid-column:span 6;">
-              <div class="card-header" style="margin-bottom:4px;">
-                <div class="card-title" style="font-size:13px;">시즌전 뱃지</div>
-              </div>
-              <div class="desc"></div>
-              <div id="badgeList_season" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="row" style="margin-top:14px;">
-        <button class="btn" id="saveBtn">Supabase에 저장</button>
-        <button class="btn btn-outline" id="reloadBtn">다시 불러오기</button>
-        <button class="btn btn-danger" id="resetAllBtn">전체 초기화 (시즌ID 제외)</button>
-        <div class="spacer"></div>
-        <span class="desc">※ 저장 시 index.html(손님용) 화면에 즉시 반영됩니다.</span>
-      </div>
-    </div>
-
-    <div class="footer">
-      데이터를 잃지 않으려면: Supabase 프로젝트/테이블을 절대 삭제하지 말 것 · 브라우저 비밀번호는 이 PC에만 저장됨
-    </div>
+    </section>
   </div>
 
-  <!-- Supabase CDN (window.supabase) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div class="row" style="margin-top:16px">
+    <button class="btn" id="saveDraftBtn">Supabase에 저장</button>
+    <button class="btn btn-outline" id="loadDraftBtn">Supabase에서 불러오기</button>
+    <button class="btn btn-danger" id="resetAllBtn">전체 입력 초기화</button>
+  </div>
+  <div class="statusbar" id="syncStatus">새 Supabase와 연결됨 · 저장하면 손님용 Index에 반영됩니다.</div>
+  <div class="footer">신촌 꾼 낚시카페 · 관리자 화면</div>
+</div>
 
-  <!-- ===== JS: Supabase + 로컬 보안 ===== -->
-  <script>
-    const SUPABASE_URL = 'https://phagmstmqilxyojhhvfn.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYWdtc3RtcWlseHlvamhodmZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzMTQ5NzAsImV4cCI6MjA3Nzg5MDk3MH0.-qOxDrtWLanL8XtYj_FAs2H91X6cOAiYD4eTsZecLGM';
-    const TABLE = 'kkun_state';
-    const ROW_ID = 'global';
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://pvstngpqkjsxknrzkfty.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_JPLHnza1BIUYwTSkEF0jrw_2HpTde-5';
+  const TABLE = 'ranking_board';
+  const ROW_ID = 'main';
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const ADMIN_HASH_KEY = 'kkun_admin_hash_v2';
-    const ATTEMPT_KEY = 'kkun_admin_attempts';
-    const LOCK_UNTIL_KEY = 'kkun_admin_lock_until';
-    const MAX_ATTEMPTS = 5;
-    const LOCK_MS = 5 * 60 * 1000;
+  const fixedPrizeDefaults = {
+    rank_big: ['50,000P','30,000P','10,000P','5,000P','3,000P'],
+    rank_small: ['50,000P','30,000P','10,000P','5,000P','3,000P'],
+    rank_tour: ['1시간 할인권 3장','1시간 할인권 1장','4,000원 할인권 1장','3,000원 할인권 1장','2,000원 할인권 1장']
+  };
 
-    // Supabase 클라이언트 (CDN 방식)
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  function fixedRows(key){
+    return Array.from({length:5}, (_,i)=>({name:'', score:'', prize:fixedPrizeDefaults[key]?.[i] || ''}));
+  }
 
-    const $ = (sel, el = document) => el.querySelector(sel);
-    const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
-
-    // 🔹 기본 상품 텍스트 (손님용 index.html과 동일)
-    const DEFAULT_PRIZES = {
-      rank_big: ['50,000P','30,000P','10,000P','5,000P','3,000P'],
-      rank_small: ['50,000P','30,000P','10,000P','5,000P','3,000P'],
-      rank_tour: [
-        '1시간 할인권 3장',
-        '1시간 할인권 1장',
-        '4,000원 할인권 1장',
-        '3,000원 할인권 1장',
-        '2,000원 할인권 1장',
-      ],
-      rank_season: [
-        '10만P + 1시간 할인권 3장',
-        '7만P + 1시간 할인권 2장',
-        '3만P + 1만원 할인권 1장',
-      ],
+  function defaultState(){
+    return {
+      rank_big: fixedRows('rank_big'),
+      rank_small: fixedRows('rank_small'),
+      rank_tour: fixedRows('rank_tour'),
+      rank_season: Array.from({length:8},()=>({name:'', score:'', prize:''})),
+      bingo: Array.from({length:16},()=>({label:'', used:false})),
+      lastUpdated: null
     };
+  }
 
-    function createDefaultState() {
-      const bingo = Array.from({ length: 16 }, () => ({ label: '', used: false }));
-      return {
-        lastUpdated: null,
-        season: {
-          id: genSeasonId(),
-          startedAt: new Date().toISOString(),
-          badges: {
-            rank_big: [],
-            rank_small: [],
-            rank_tour: [],
-            rank_season: [],
-          },
-        },
-        titles: {
-          rank_big: '대물왕',
-          rank_small: '소물왕',
-          rank_tour: '천하제일 낚시대회',
-          rank_season: '시즌전',
-          bingo: '치킨빙고',
-        },
-        // 🔹 등수별 상품 기본값
-        prizes: DEFAULT_PRIZES,
-        rank_big: [],
-        rank_small: [],
-        rank_tour: [],
-        rank_season: [],
-        bingo,
-      };
-    }
+  let state = defaultState();
+  const $ = (s)=>document.querySelector(s);
 
-    function mergeWithDefaults(loaded) {
-      const base = createDefaultState();
-      const merged = {
-        ...base,
-        ...loaded,
-        season: {
-          ...base.season,
-          ...(loaded.season || {}),
-          badges: {
-            ...base.season.badges,
-            ...(loaded.season && loaded.season.badges ? loaded.season.badges : {}),
-          },
-        },
-        titles: {
-          ...base.titles,
-          ...(loaded.titles || {}),
-        },
-        // 🔹 prizes는 기본값 + 저장된 값 합쳐서 사용
-        prizes: {
-          ...DEFAULT_PRIZES,
-          ...(loaded.prizes || {}),
-        },
-      };
-      return merged;
-    }
+  function safeText(v){ return v == null ? '' : String(v); }
+  function scoreNumber(v){
+    const n = parseFloat(String(v ?? '').replace(/[^0-9.-]/g,''));
+    return Number.isNaN(n) ? -Infinity : n;
+  }
 
-    function genSeasonId() {
-      const d = new Date();
-      return `${d.getFullYear()} Q${Math.floor(d.getMonth() / 3) + 1}`;
-    }
-
-    function toNumber(v) {
-      if (v == null) return 0;
-      const n = parseFloat(String(v).replace(/[^0-9.-]/g, ''));
-      return Number.isNaN(n) ? 0 : n;
-    }
-
-    async function loadStateFromSupabase() {
-      try {
-        const { data, error } = await supabase
-          .from(TABLE)
-          .select('state')
-          .eq('id', ROW_ID)
-          .single();
-
-        if (error) {
-          console.error('[admin] load error:', error);
-          return createDefaultState();
-        }
-
-        if (!data || !data.state || Object.keys(data.state).length === 0) {
-          return createDefaultState();
-        }
-
-        return mergeWithDefaults(data.state);
-      } catch (e) {
-        console.error('[admin] exception:', e);
-        return createDefaultState();
-      }
-    }
-
-    /* =====================================================
-       ✅ PATCH: 저장 오류 방지용 안정 save 함수
-       ===================================================== */
-    async function saveStateToSupabase(state) {
-      // 1️⃣ 먼저 update 시도 (이미 global row가 있다고 가정)
-      const { error: updateError } = await supabase
-        .from(TABLE)
-        .update({ state })
-        .eq('id', ROW_ID);
-
-      // 2️⃣ update가 실패(행 없음 등)하면 insert로 생성
-      if (updateError) {
-        console.warn('[admin] update 실패, insert로 재시도:', updateError);
-        const { error: insertError } = await supabase
-          .from(TABLE)
-          .insert([{ id: ROW_ID, state }]);
-
-        if (insertError) {
-          console.error('[admin] insert도 실패:', insertError);
-          throw insertError;
-        }
-      }
-    }
-
-    function nowISO() {
-      return new Date().toISOString();
-    }
-
-    function updateLastSaved(state) {
-      $('#lastSaved').textContent = state.lastUpdated
-        ? new Date(state.lastUpdated).toLocaleString('ko-KR')
-        : '-';
-    }
-
-    /* ===== 비밀번호 관련 ===== */
-    async function sha256(text) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-      return Array.from(new Uint8Array(buf))
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('');
-    }
-
-    // 🔐 기본 비밀번호 admin1234 자동 세팅 (이미 있으면 건드리지 않음)
-    async function ensureDefaultAdminPassword() {
-      const existing = localStorage.getItem(ADMIN_HASH_KEY);
-      if (!existing) {
-        const hash = await sha256('admin1234');
-        localStorage.setItem(ADMIN_HASH_KEY, hash);
-      }
-    }
-
-    function showGate() {
-      const hasPw = !!localStorage.getItem(ADMIN_HASH_KEY);
-      $('#setupBox').style.display = hasPw ? 'none' : 'block';
-      $('#loginBox').style.display = hasPw ? 'block' : 'none';
-      $('#gate').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      updateGateMsg();
-    }
-
-    function updateGateMsg() {
-      const lockUntil = parseInt(localStorage.getItem(LOCK_UNTIL_KEY) || '0', 10);
-      const msgEl = $('#gateMsg');
-      if (!msgEl) return;
-
-      if (Date.now() < lockUntil) {
-        const left = Math.ceil((lockUntil - Date.now()) / 1000);
-        msgEl.textContent = `로그인 잠금 상태입니다. ${left}초 후 다시 시도해주세요.`;
-      } else {
-        msgEl.textContent = '비밀번호를 입력하면 관리자 화면이 열립니다.';
-      }
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.altKey && e.key.toLowerCase() === 'a') {
-        showGate();
-      }
-    });
-
-    $('#setPwBtn')?.addEventListener('click', async () => {
-      const a = $('#newPw').value.trim();
-      const b = $('#newPw2').value.trim();
-      if (a.length < 6) {
-        alert('비밀번호는 6자 이상으로 설정하는 것을 권장합니다.');
-        return;
-      }
-      if (a !== b) {
-        alert('비밀번호 확인이 일치하지 않습니다.');
-        return;
-      }
-      const hash = await sha256(a);
-      localStorage.setItem(ADMIN_HASH_KEY, hash);
-      localStorage.removeItem(LOCK_UNTIL_KEY);
-      sessionStorage.removeItem(ATTEMPT_KEY);
-      alert('비밀번호가 설정되었습니다. 이제 로그인할 수 있습니다.');
-      showGate();
-    });
-
-    $('#loginBtn')?.addEventListener('click', async () => {
-      const lockUntil = parseInt(localStorage.getItem(LOCK_UNTIL_KEY) || '0', 10);
-      if (Date.now() < lockUntil) {
-        updateGateMsg();
-        return;
-      }
-
-      const input = $('#pw').value;
-      const hash = await sha256(input);
-      const saved = localStorage.getItem(ADMIN_HASH_KEY);
-
-      if (saved && hash === saved) {
-        // 성공
-        $('#gate').style.display = 'none';
-        $('#panel').style.display = 'block';
-        sessionStorage.removeItem(ATTEMPT_KEY);
-        localStorage.removeItem(LOCK_UNTIL_KEY);
-        boot();
-      } else {
-        let attempts = parseInt(sessionStorage.getItem(ATTEMPT_KEY) || '0', 10) + 1;
-        sessionStorage.setItem(ATTEMPT_KEY, String(attempts));
-
-        if (attempts >= MAX_ATTEMPTS) {
-          localStorage.setItem(LOCK_UNTIL_KEY, String(Date.now() + LOCK_MS));
-          sessionStorage.removeItem(ATTEMPT_KEY);
-          alert('로그인 시도 초과로 5분간 잠금되었습니다.');
-        } else {
-          alert(`비밀번호가 올바르지 않습니다. (시도 ${attempts}/${MAX_ATTEMPTS})`);
-        }
-        updateGateMsg();
-      }
-    });
-
-    $('#changePwToggle')?.addEventListener('click', () => {
-      const box = $('#changePwBox');
-      box.style.display = box.style.display === 'none' || !box.style.display ? 'block' : 'none';
-    });
-
-    $('#applyPwBtn')?.addEventListener('click', async () => {
-      const cur = $('#curPw').value;
-      const a = $('#npw1').value;
-      const b = $('#npw2').value;
-
-      if (a !== b) {
-        alert('새 비밀번호 확인이 일치하지 않습니다.');
-        return;
-      }
-      if (a.length < 6) {
-        alert('비밀번호는 6자 이상으로 설정하는 것을 권장합니다.');
-        return;
-      }
-      const saved = localStorage.getItem(ADMIN_HASH_KEY);
-      if (saved) {
-        const hashCur = await sha256(cur);
-        if (hashCur !== saved) {
-          alert('현재 비밀번호가 올바르지 않습니다.');
-          return;
-        }
-      }
-      const hashNew = await sha256(a);
-      localStorage.setItem(ADMIN_HASH_KEY, hashNew);
-      alert('비밀번호가 변경되었습니다.');
-      $('#changePwBox').style.display = 'none';
-    });
-
-    /* ===== 상태 및 UI 바인딩 ===== */
-    let state = createDefaultState();
-
-    function rankFormHTML(key) {
-      const rows = Array.from({ length: 5 }, (_, i) => {
-        return `
-          <tr>
-            <td>${i + 1}</td>
-            <td><input type="text" data-role="name" data-key="${key}" data-idx="${i}" placeholder="이름"></td>
-            <td><input type="text" data-role="score" data-key="${key}" data-idx="${i}" placeholder="점수 (숫자 우선)"></td>
-          </tr>
-        `;
-      }).join('');
-      return `
-        <table>
-          <thead>
-            <tr><th>#</th><th>이름</th><th>점수</th></tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-    }
-
-    function mountRankForms() {
-      ['rank_big', 'rank_small', 'rank_tour'].forEach((key) => {
-        const host = document.querySelector(`[data-key="${key}"]`);
-        host.innerHTML = rankFormHTML(key);
-        const arr = state[key] || [];
-        arr.slice(0, 5).forEach((item, i) => {
-          const nm = document.querySelector(`input[data-role="name"][data-key="${key}"][data-idx="${i}"]`);
-          const sc = document.querySelector(`input[data-role="score"][data-key="${key}"][data-idx="${i}"]`);
-          if (nm) nm.value = item.name || '';
-          if (sc) sc.value = item.score ?? '';
+  function renderFixedTable(key, bodyId, scorePlaceholder){
+    const body = document.getElementById(bodyId);
+    body.innerHTML = '';
+    state[key] = Array.from({length:5}, (_,i)=>state[key]?.[i] || {name:'',score:'',prize:''});
+    state[key].forEach((row,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i+1}등</td>
+        <td><input type="text" data-key="${key}" data-idx="${i}" data-field="name" placeholder="이름" value=""></td>
+        <td><input type="text" data-key="${key}" data-idx="${i}" data-field="score" placeholder="${scorePlaceholder}" value=""></td>
+        <td><input type="text" data-key="${key}" data-idx="${i}" data-field="prize" placeholder="상품 내용" value=""></td>`;
+      body.appendChild(tr);
+      [...tr.querySelectorAll('input')].forEach(inp=>{
+        inp.value = safeText(row[inp.dataset.field]);
+        inp.addEventListener('input', ()=>{
+          state[key][i][inp.dataset.field] = inp.value;
         });
       });
-    }
+    });
+  }
 
-    function renderTitlesAdmin() {
-      const t = state.titles || {};
-      $('#title_rank_big').value = t.rank_big || '대물왕';
-      $('#title_rank_small').value = t.rank_small || '소물왕';
-      $('#title_rank_tour').value = t.rank_tour || '천하제일 낚시대회';
-      $('#title_rank_season').value = t.rank_season || '시즌전';
-      $('#title_bingo').value = t.bingo || '치킨빙고';
+  function sortSeason(){
+    const filled = state.rank_season.filter(x => safeText(x.name).trim() || safeText(x.score).trim() || safeText(x.prize).trim());
+    const empty = state.rank_season.filter(x => !(safeText(x.name).trim() || safeText(x.score).trim() || safeText(x.prize).trim()));
+    filled.sort((a,b)=>scoreNumber(b.score)-scoreNumber(a.score));
+    state.rank_season = [...filled, ...empty];
+  }
 
-      $$('[data-title-display]').forEach((el) => {
-        const key = el.getAttribute('data-title-display');
-        if (!key) return;
-        if (key === 'bingo') {
-          el.textContent = (t.bingo || '치킨빙고') + ' 4 × 4';
-        } else if (key === 'rank_season') {
-          el.textContent = (t.rank_season || '시즌전') + ' Top 5';
-        } else {
-          el.textContent = t[key] || el.textContent;
+  function renderSeason(){
+    const body = $('#season_body');
+    body.innerHTML = '';
+    state.rank_season.forEach((row,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i+1}등</td>
+        <td><input type="text" data-field="name" placeholder="이름"></td>
+        <td><input type="text" data-field="score" placeholder="점수"></td>
+        <td><input type="text" data-field="prize" placeholder="상품 내용"></td>
+        <td class="season-actions"><span class="del">삭제</span></td>`;
+      body.appendChild(tr);
+      tr.querySelectorAll('input').forEach(inp=>{
+        inp.value = safeText(row[inp.dataset.field]);
+        inp.addEventListener('input', ()=>{ row[inp.dataset.field] = inp.value; updateSeasonCount(); });
+        if(inp.dataset.field === 'score'){
+          inp.addEventListener('change', ()=>{ sortSeason(); renderSeason(); });
         }
       });
-    }
-
-    function applyTitleInputsToState() {
-      state.titles = state.titles || {};
-      state.titles.rank_big = $('#title_rank_big').value.trim() || '대물왕';
-      state.titles.rank_small = $('#title_rank_small').value.trim() || '소물왕';
-      state.titles.rank_tour = $('#title_rank_tour').value.trim() || '천하제일 낚시대회';
-      state.titles.rank_season = $('#title_rank_season').value.trim() || '시즌전';
-      state.titles.bingo = $('#title_bingo').value.trim() || '치킨빙고';
-    }
-
-    // 🔹 상품 입력값을 화면에 채우기
-    function renderPrizesAdmin() {
-      const p = state.prizes || DEFAULT_PRIZES;
-      const keys = ['rank_big', 'rank_small', 'rank_tour', 'rank_season'];
-      keys.forEach((key) => {
-        const arr = p[key] || [];
-        for (let i = 0; i < 5; i++) {
-          const el = document.getElementById(`prize_${key}_${i}`);
-          if (!el) continue;
-          el.value = arr[i] || '';
-        }
+      tr.querySelector('.del').addEventListener('click', ()=>{
+        if(!confirm(`${i+1}번째 참가자 행을 삭제할까요?`)) return;
+        state.rank_season.splice(i,1);
+        if(state.rank_season.length===0) state.rank_season.push({name:'',score:'',prize:''});
+        renderSeason();
       });
-    }
-
-    // 🔹 화면 입력값 → state.prizes 로 반영
-    function applyPrizeInputsToState() {
-      state.prizes = state.prizes || {};
-      const keys = ['rank_big', 'rank_small', 'rank_tour', 'rank_season'];
-      keys.forEach((key) => {
-        const arr = [];
-        for (let i = 0; i < 5; i++) {
-          const el = document.getElementById(`prize_${key}_${i}`);
-          const v = (el?.value || '').trim();
-          arr.push(v); // 비워두면 ''으로 저장 → 손님 화면에서 표시 안 됨
-        }
-        state.prizes[key] = arr;
-      });
-    }
-
-    function renderBingoEditor() {
-      const grid = $('#bingoGrid');
-      grid.innerHTML = '';
-      let remain = 0;
-
-      (state.bingo || []).forEach((cell, idx) => {
-        const div = document.createElement('div');
-        div.className = 'bingo-cell' + (cell.used ? ' used' : '');
-        const row1 = document.createElement('div');
-        row1.className = 'row bingo-label-row';
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = '상품명 (예: 치킨/음료/1천P)';
-        input.value = cell.label || '';
-        input.addEventListener('input', () => {
-          state.bingo[idx].label = input.value;
-        });
-        row1.appendChild(input);
-
-        const row2 = document.createElement('div');
-        row2.className = 'row bingo-btn-row';
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn btn-outline';
-        btn.textContent = cell.used ? '사용됨 해제' : '사용됨 표시';
-        btn.addEventListener('click', () => {
-          state.bingo[idx].used = !state.bingo[idx].used;
-          renderBingoEditor();
-        });
-        row2.appendChild(btn);
-
-        div.appendChild(row1);
-        div.appendChild(row2);
-        grid.appendChild(div);
-        if (!cell.used) remain += 1;
-      });
-
-      $('#bingoRemain').textContent = remain;
-    }
-
-    function renderSeasonTable() {
-      const tbody = $('#seasonTbody');
-      tbody.innerHTML = '';
-      const arr = state.rank_season || [];
-
-      arr.forEach((item, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td><input type="text" data-season-role="name" data-idx="${idx}" value="${item.name || ''}" placeholder="이름"></td>
-          <td><input type="text" data-season-role="score" data-idx="${idx}" value="${item.score || ''}" placeholder="점수 (숫자 우선)"></td>
-          <td class="season-row-actions"><span class="link-danger" data-season-role="del" data-idx="${idx}">삭제</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      $$('input[data-season-role="name"]').forEach((el) => {
-        el.addEventListener('input', () => {
-          const i = Number(el.dataset.idx);
-          state.rank_season[i] = state.rank_season[i] || { name: '', score: '' };
-          state.rank_season[i].name = el.value;
-        });
-      });
-      $$('input[data-season-role="score"]').forEach((el) => {
-        el.addEventListener('input', () => {
-          const i = Number(el.dataset.idx);
-          state.rank_season[i] = state.rank_season[i] || { name: '', score: '' };
-          state.rank_season[i].score = el.value;
-        });
-      });
-      $$('span[data-season-role="del"]').forEach((el) => {
-        el.addEventListener('click', () => {
-          const i = Number(el.dataset.idx);
-          if (!confirm('이 행을 삭제할까요?')) return;
-          state.rank_season.splice(i, 1);
-          renderSeasonTable();
-        });
-      });
-
-      $('#seasonId').textContent = state.season?.id || '-';
-    }
-
-    function renderBadgesAdmin() {
-      const badges = state.season?.badges || {};
-      const keys = ['rank_big', 'rank_small', 'rank_tour', 'rank_season'];
-      const idMap = {
-        rank_big: 'badgeList_big',
-        rank_small: 'badgeList_small',
-        rank_tour: 'badgeList_tour',
-        rank_season: 'badgeList_season',
-      };
-
-      keys.forEach((key) => {
-        const box = document.getElementById(idMap[key]);
-        box.innerHTML = '';
-        const arr = badges[key] || [];
-        if (arr.length === 0) {
-          const span = document.createElement('span');
-          span.textContent = '아직 없음';
-          span.style.fontSize = '11px';
-          span.style.color = 'var(--muted)';
-          box.appendChild(span);
-          return;
-        }
-
-        arr.forEach((name) => {
-          const wrap = document.createElement('span');
-          wrap.style.display = 'inline-flex';
-          wrap.style.alignItems = 'center';
-          wrap.style.gap = '4px';
-          wrap.style.padding = '2px 8px';
-          wrap.style.borderRadius = '999px';
-          wrap.style.border = '1px solid rgba(56,189,248,0.7)';
-          wrap.style.background = 'rgba(15,23,42,0.9)';
-          wrap.style.fontSize = '11px';
-          wrap.style.color = '#e5e7eb';
-
-          const text = document.createElement('span');
-          text.textContent = name;
-          const x = document.createElement('span');
-          x.textContent = '✕';
-          x.style.cursor = 'pointer';
-          x.style.color = '#fb7185';
-          x.style.fontSize = '11px';
-          x.addEventListener('click', () => {
-            state.season.badges[key] = (state.season.badges[key] || []).filter((n) => n !== name);
-            renderBadgesAdmin();
-          });
-
-          wrap.appendChild(text);
-          wrap.appendChild(x);
-          box.appendChild(wrap);
-        });
-      });
-    }
-
-    $('#addSeasonRowBtn')?.addEventListener('click', () => {
-      state.rank_season = state.rank_season || [];
-      if (state.rank_season.length >= 100) {
-        alert('최대 100명까지 입력할 수 있습니다.');
-        return;
-      }
-      state.rank_season.push({ name: '', score: '' });
-      renderSeasonTable();
     });
+    updateSeasonCount();
+  }
 
-    $('#seasonResetBtn')?.addEventListener('click', () => {
-      if (!confirm('시즌 ID를 새로 만들고, 시즌 뱃지/랭킹은 그대로 둘까요?')) return;
-      state.season = state.season || { id: genSeasonId(), startedAt: nowISO(), badges: {} };
-      state.season.id = genSeasonId();
-      state.season.startedAt = nowISO();
-      state.season.badges = state.season.badges || {
-        rank_big: [],
-        rank_small: [],
-        rank_tour: [],
-        rank_season: [],
-      };
-      $('#seasonId').textContent = state.season.id;
-      alert('새 시즌 ID가 생성되었습니다.');
-    });
+  function updateSeasonCount(){
+    $('#seasonCount').textContent = state.rank_season.filter(x=>safeText(x.name).trim()).length;
+  }
 
-    $('#resetBingoBtn')?.addEventListener('click', () => {
-      if (!confirm('치킨빙고를 전체 리셋할까요?')) return;
-      state.bingo = Array.from({ length: 16 }, () => ({ label: '', used: false }));
-      renderBingoEditor();
-    });
-
-    $('#badgeAddBtn')?.addEventListener('click', () => {
-      const cat = $('#badgeCat').value;
-      const names = $('#badgeNames').value.split(',').map((s) => s.trim()).filter(Boolean);
-      if (names.length === 0) {
-        alert('추가할 이름을 입력해주세요.');
-        return;
-      }
-      state.season = state.season || { id: genSeasonId(), startedAt: nowISO(), badges: {} };
-      state.season.badges = state.season.badges || {
-        rank_big: [],
-        rank_small: [],
-        rank_tour: [],
-        rank_season: [],
-      };
-      const cur = state.season.badges[cat] || [];
-      state.season.badges[cat] = [...new Set([...cur, ...names])];
-      $('#badgeNames').value = '';
-      renderBadgesAdmin();
-    });
-
-    $('#badgeFromTopBtn')?.addEventListener('click', () => {
-      state.season = state.season || { id: genSeasonId(), startedAt: nowISO(), badges: {} };
-      state.season.badges = state.season.badges || {
-        rank_big: [],
-        rank_small: [],
-        rank_tour: [],
-        rank_season: [],
-      };
-
-      const keys = ['rank_big', 'rank_small', 'rank_tour', 'rank_season'];
-      keys.forEach((key) => {
-        const src =
-          key === 'rank_season'
-            ? (state.rank_season || [])
-                .slice()
-                .sort((a, b) => toNumber(b.score) - toNumber(a.score))
-                .slice(0, 5)
-            : (state[key] || []);
-        const names = src.map((x) => x.name).filter(Boolean);
-        const cur = state.season.badges[key] || [];
-        state.season.badges[key] = [...new Set([...cur, ...names])];
+  function renderBingo(){
+    const grid = $('#bingoGrid');
+    grid.innerHTML = '';
+    let remain = 0;
+    state.bingo = Array.from({length:16},(_,i)=>state.bingo?.[i] || {label:'',used:false});
+    state.bingo.forEach((cell,i)=>{
+      if(!cell.used) remain++;
+      const div = document.createElement('div');
+      div.className = 'bingo-cell' + (cell.used ? ' used' : '');
+      div.innerHTML = `
+        <div class="bingo-no">${i+1}번 칸</div>
+        <input type="text" placeholder="미션/내용 입력">
+        <div class="bingo-x">X</div>
+        <button type="button" class="btn btn-outline small-btn bingo-toggle">${cell.used ? 'X 해제' : '달성 X 표시'}</button>`;
+      const input = div.querySelector('input');
+      input.value = safeText(cell.label);
+      input.addEventListener('input', ()=>{ state.bingo[i].label = input.value; });
+      div.querySelector('.bingo-toggle').addEventListener('click', ()=>{
+        state.bingo[i].used = !state.bingo[i].used;
+        renderBingo();
       });
-
-      renderBadgesAdmin();
-      alert('현재 Top 5가 시즌 뱃지에 누적되었습니다.');
+      grid.appendChild(div);
     });
+    $('#bingoRemain').textContent = remain;
+  }
 
-    $('#saveBtn')?.addEventListener('click', async () => {
-      // 랭킹 값 읽어오기
-      ['rank_big', 'rank_small', 'rank_tour'].forEach((key) => {
-        const list = [];
-        for (let i = 0; i < 5; i++) {
-          const nm = document.querySelector(`input[data-role="name"][data-key="${key}"][data-idx="${i}"]`)?.value.trim() || '';
-          const sc = document.querySelector(`input[data-role="score"][data-key="${key}"][data-idx="${i}"]`)?.value.trim() || '';
-          if (nm || sc) list.push({ name: nm, score: sc });
-        }
-        state[key] = list;
-      });
+  function renderAll(){
+    renderFixedTable('rank_big','rank_big_body','예: 2,350g');
+    renderFixedTable('rank_small','rank_small_body','예: 210g');
+    renderFixedTable('rank_tour','rank_tour_body','점수/기록');
+    renderSeason();
+    renderBingo();
+    $('#lastSaved').textContent = state.lastUpdated ? new Date(state.lastUpdated).toLocaleString('ko-KR') : '-';
+  }
 
-      // 제목 입력값을 상태에 반영
-      applyTitleInputsToState();
-      // 상품 입력값을 상태에 반영
-      applyPrizeInputsToState();
-      console.log('PRIZE_CONFIG', state.PRIZE_CONFIG);
-      state.lastUpdated = nowISO();
+  $('#addSeasonBtn').addEventListener('click', ()=>{
+    state.rank_season.push({name:'',score:'',prize:''});
+    renderSeason();
+    setTimeout(()=>{
+      const rows = document.querySelectorAll('#season_body tr');
+      rows[rows.length-1]?.querySelector('input[data-field="name"]')?.focus();
+    },0);
+  });
 
-      try {
-        await saveStateToSupabase(state);
-        updateLastSaved(state);
-        alert('Supabase에 저장되었습니다. 손님 화면도 자동으로 갱신됩니다.');
-      } catch (e) {
-        alert('저장 중 오류가 발생했습니다. 콘솔 로그를 확인해주세요.');
-      }
-    });
+  $('#sortSeasonBtn').addEventListener('click', ()=>{ sortSeason(); renderSeason(); });
 
-    $('#reloadBtn')?.addEventListener('click', async () => {
-      if (!confirm('Supabase에서 다시 불러올까요? (저장되지 않은 변경 내용은 사라집니다.)')) return;
-      state = await loadStateFromSupabase();
-      mountRankForms();
-      renderBingoEditor();
-      renderSeasonTable();
-      renderBadgesAdmin();
-      renderTitlesAdmin();
-      renderPrizesAdmin();
-      updateLastSaved(state);
-    });
+  $('#resetBingoBtn').addEventListener('click', ()=>{
+    if(!confirm('치킨빙고의 X 표시를 전부 해제할까요? 입력한 글은 그대로 유지됩니다.')) return;
+    state.bingo.forEach(x=>x.used=false);
+    renderBingo();
+  });
 
-    $('#resetAllBtn')?.addEventListener('click', async () => {
-      if (!confirm('랭킹 + 빙고를 전부 초기화할까요? (시즌 ID와 뱃지 목록, 제목, 상품 설정은 유지)')) return;
-      const keepSeason = state.season;
-      const keepTitles = state.titles;
-      const keepPrizes = state.prizes;
-      state = createDefaultState();
-      state.season = keepSeason || state.season;
-      state.titles = keepTitles || state.titles;
-      state.prizes = keepPrizes || state.prizes;
-      state.lastUpdated = nowISO();
-      mountRankForms();
-      renderBingoEditor();
-      renderSeasonTable();
-      renderBadgesAdmin();
-      renderTitlesAdmin();
-      renderPrizesAdmin();
-      updateLastSaved(state);
-      try {
-        await saveStateToSupabase(state);
-        alert('초기화 후 Supabase에 저장되었습니다.');
-      } catch (e) {
-        alert('초기화 저장 중 오류 발생.');
-      }
-    });
-
-    async function boot() {
-      state = await loadStateFromSupabase();
-      mountRankForms();
-      renderBingoEditor();
-      renderSeasonTable();
-      renderBadgesAdmin();
-      renderTitlesAdmin();
-      renderPrizesAdmin();
-      updateLastSaved(state);
+  async function saveToSupabase(){
+    sortSeason();
+    state.lastUpdated = new Date().toISOString();
+    $('#syncStatus').textContent = '저장 중...';
+    const { error } = await supabaseClient
+      .from(TABLE)
+      .update({ data: state, updated_at: state.lastUpdated })
+      .eq('id', ROW_ID);
+    if(error){
+      console.error(error);
+      $('#syncStatus').textContent = '저장 실패 · 인터넷 연결 또는 Supabase 설정을 확인하세요.';
+      alert('Supabase 저장에 실패했습니다.');
+      return;
     }
+    renderAll();
+    $('#syncStatus').textContent = '저장 완료 · 손님용 Index에 반영되었습니다.';
+    alert('Supabase에 저장했습니다.');
+  }
 
-    // 페이지 첫 진입: 기본 비번(admin1234) 없으면 생성 후, 게이트 표시
-    (async () => {
-      await ensureDefaultAdminPassword();
-      showGate();
-    })();
-  </script>
+  async function loadFromSupabase(showAlert=false){
+    $('#syncStatus').textContent = 'Supabase 데이터 불러오는 중...';
+    const { data, error } = await supabaseClient
+      .from(TABLE)
+      .select('data, updated_at')
+      .eq('id', ROW_ID)
+      .single();
+    if(error){
+      console.error(error);
+      $('#syncStatus').textContent = '불러오기 실패 · 현재 화면의 입력값은 유지됩니다.';
+      if(showAlert) alert('Supabase 데이터를 불러오지 못했습니다.');
+      return;
+    }
+    if(data?.data && Object.keys(data.data).length){
+      state = {...defaultState(), ...data.data};
+      state.rank_big = Array.from({length:5},(_,i)=>state.rank_big?.[i] || {name:'',score:'',prize:''});
+      state.rank_small = Array.from({length:5},(_,i)=>state.rank_small?.[i] || {name:'',score:'',prize:''});
+      state.rank_tour = Array.from({length:5},(_,i)=>state.rank_tour?.[i] || {name:'',score:'',prize:''});
+      state.rank_season = Array.isArray(state.rank_season) && state.rank_season.length ? state.rank_season : defaultState().rank_season;
+      state.bingo = Array.from({length:16},(_,i)=>state.bingo?.[i] || {label:'',used:false});
+      state.lastUpdated = data.updated_at || state.lastUpdated;
+    }
+    renderAll();
+    $('#syncStatus').textContent = 'Supabase 연결 정상 · 저장하면 Index에 반영됩니다.';
+    if(showAlert) alert('Supabase 데이터를 불러왔습니다.');
+  }
+
+  $('#saveDraftBtn').addEventListener('click', saveToSupabase);
+  $('#loadDraftBtn').addEventListener('click', ()=>loadFromSupabase(true));
+
+  $('#resetAllBtn').addEventListener('click', ()=>{
+    if(!confirm('현재 입력한 랭킹/시즌전/빙고 내용을 전부 초기화할까요?')) return;
+    state = defaultState();
+    renderAll();
+  });
+
+  renderAll();
+  loadFromSupabase(false);
+</script>
 </body>
 </html>

@@ -714,10 +714,10 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const SUPABASE_URL = 'https://phagmstmqilxyojhhvfn.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoYWdtc3RtcWlseHlvamhodmZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzMTQ5NzAsImV4cCI6MjA3Nzg5MDk3MH0.-qOxDrtWLanL8XtYj_FAs2H91X6cOAiYD4eTsZecLGM';
-    const TABLE = 'kkun_state';
-    const ROW_ID = 'global';
+    const SUPABASE_URL = 'https://pvstngpqkjsxknrzkfty.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_JPLHnza1BIUYwTSkEF0jrw_2HpTde-5';
+    const TABLE = 'ranking_board';
+    const ROW_ID = 'main';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -725,30 +725,13 @@
     const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 
     function createDefaultState() {
-      const bingo = Array.from({ length: 16 }, () => ({ label: '', used: false }));
       return {
         lastUpdated: null,
-        season: {
-          id: genSeasonId(),
-          startedAt: new Date().toISOString(),
-          badges: {
-            rank_big: [],
-            rank_small: [],
-            rank_tour: [],
-            rank_season: [],
-          },
-        },
-        rank_big: [],
-        rank_small: [],
-        rank_tour: [],
+        rank_big: Array.from({ length: 5 }, () => ({ name: '', score: '', prize: '' })),
+        rank_small: Array.from({ length: 5 }, () => ({ name: '', score: '', prize: '' })),
+        rank_tour: Array.from({ length: 5 }, () => ({ name: '', score: '', prize: '' })),
         rank_season: [],
-        bingo,
-        titles: {
-          rank_big: '대물왕',
-          rank_small: '소물왕',
-          rank_tour: '천하제일 낚시대회',
-          rank_season: '시즌전',
-        },
+        bingo: Array.from({ length: 16 }, () => ({ label: '', used: false }))
       };
     }
 
@@ -763,7 +746,7 @@
       return Number.isNaN(n) ? 0 : n;
     }
 
-    const DEFAULT_PRIZES = {
+    const PRIZE_CONFIG = {
       rank_big: ['50,000P','30,000P','10,000P','5,000P','3,000P'],
       rank_small: ['50,000P','30,000P','10,000P','5,000P','3,000P'],
       rank_tour: [
@@ -779,7 +762,7 @@
         '3만P + 1만원 할인권 1장',
       ],
     };
-      let PRIZE_CONFIG = DEFAULT_PRIZES;
+
     const SORT_CONFIG = {
       rank_big: 'desc',
       rank_tour: 'desc',
@@ -791,23 +774,26 @@
       try {
         const { data, error } = await supabase
           .from(TABLE)
-          .select('state')
+          .select('data, updated_at')
           .eq('id', ROW_ID)
           .single();
-      
+
         if (error) {
           console.error('[index] Supabase 오류:', error);
           return createDefaultState();
         }
-        const state = data?.state || createDefaultState();
-        PRIZE_CONFIG = state.prizes || DEFAULT_PRIZES;
 
-        return state;
-    } catch (e) {
-      console.error('[index] 예외 발생:', e);
-      return createDefaultState();
+        if (!data || !data.data || Object.keys(data.data).length === 0) {
+          return createDefaultState();
+        }
+
+        return { ...createDefaultState(), ...data.data, lastUpdated: data.updated_at || data.data.lastUpdated || null };
+      } catch (err) {
+        console.error('[index] 예외:', err);
+        return createDefaultState();
       }
     }
+
     function renderTitles(state) {
       const defaultTitles = {
         rank_big: '대물왕',
@@ -827,20 +813,15 @@
     function renderRanks(state) {
       $$('.ranklist').forEach((ol) => {
         const key = ol.getAttribute('data-key');
-        const raw = state[key] || [];
-        const sortOrder = SORT_CONFIG[key] || 'desc';
+        let rows = (state[key] || []).filter((x) =>
+          String(x?.name || '').trim() || String(x?.score || '').trim()
+        );
 
-        const sorted = raw
-          .slice()
-          .sort((a, b) => {
-            const na = toNumber(a.score);
-            const nb = toNumber(b.score);
-            return sortOrder === 'asc' ? na - nb : nb - na;
-          });
+        if (key === 'rank_season') {
+          rows = rows.slice().sort((a, b) => toNumber(b.score) - toNumber(a.score));
+        }
 
-        const top5 = sorted.slice(0, 5);
-        const rewards = PRIZE_CONFIG[key] || [];
-
+        const top5 = rows.slice(0, 5);
         ol.innerHTML = '';
         if (top5.length === 0) {
           const li = document.createElement('li');
@@ -851,14 +832,8 @@
         }
 
         top5.forEach((item, idx) => {
-          const medal =
-            idx === 0 ? '🥇' :
-            idx === 1 ? '🥈' :
-            idx === 2 ? '🥉' : '';
-
-          const prizeText = rewards[idx] || '';
+          const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '';
           const chipText = idx === 3 ? 'TOP 4' : idx === 4 ? 'TOP 5' : '';
-
           const li = document.createElement('li');
           li.innerHTML = `
             <div class="rank-left">
@@ -867,7 +842,7 @@
             </div>
             <span class="rank-name">${item.name || '-'}</span>
             <span class="rank-score">${item.score || ''}</span>
-            <span class="rank-prize">${prizeText}</span>
+            <span class="rank-prize">${item.prize || ''}</span>
           `;
           ol.appendChild(li);
         });
@@ -896,7 +871,7 @@
 
     function renderBadges(state) {
       const season = state.season || {};
-      document.getElementById('seasonId').textContent = season.id || '-';
+      document.getElementById('seasonId').textContent = '현재 시즌';
 
       const badges = season.badges || {};
       ['rank_big', 'rank_small', 'rank_tour', 'rank_season'].forEach((key) => {
@@ -1000,8 +975,13 @@
     }
 
     setupSeasonModal(stateRef);
+    renderTitles(stateRef.current);
+    renderRanks(stateRef.current);
+    renderBingo(stateRef.current);
+    renderBadges(stateRef.current);
+    setLastUpdated(stateRef.current);
     refresh();
-    setInterval(refresh, 30000);
+    setInterval(refresh, 5000);
   </script>
 </body>
 </html>
